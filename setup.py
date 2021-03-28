@@ -27,7 +27,7 @@ setup(
     long_description_content_type='text/markdown',
     include_package_data=True,
     install_requires=[
-        'b-continuous-subprocess>=0.0.2,<1.0.0',
+        'b-continuous-subprocess>=0.1.0,<1.0.0',
     ],
     author='Laimonas Sutkus',
     author_email='laimonas.sutkus@biomapas.com',
