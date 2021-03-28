@@ -2,6 +2,7 @@ import threading
 
 from b_continuous_subprocess.continuous_subprocess import ContinuousSubprocess
 
+from b_aws_cdk_parallel.color_print import cprint
 from b_aws_cdk_parallel.deployment_type import DeploymentType
 from b_aws_cdk_parallel.error_handling_strategy import ErrorHandlingStrategy
 from b_aws_cdk_parallel.print_colors import PrintColors
@@ -12,7 +13,12 @@ class DeployCommand:
         self.__stack = stack
         self.__deployment_type = deployment_type
 
-    def execute(self, error_handling_strategy: ErrorHandlingStrategy, thread_event: threading.Event = None) -> None:
+    def execute(
+            self,
+            error_handling_strategy: ErrorHandlingStrategy,
+            thread_event: threading.Event = None,
+            suppress_command_output: bool = False
+    ) -> None:
         """
         Executes the CDK deployment command.
 
@@ -31,7 +37,11 @@ class DeployCommand:
         # We want to ensure that each stack deployment can have its own output
         # because running multiple deployments in parallel usually results in
         # CDK asset errors like clashes/misses/etc.
-        command += ' --output=./cdk_stacks/{stack}'
+        command += f' --output=./cdk_stacks/{self.__stack}'
+
+        command += ' --progress events'
+
+        cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
 
         process = ContinuousSubprocess(command)
         process_generator = process.execute()
@@ -39,50 +49,27 @@ class DeployCommand:
         try:
             for line in process_generator:
                 if thread_event and thread_event.is_set():
-                    print(
-                        f'{PrintColors.WARNING}'
-                        f'This thread just got an event to terminate all work!'
-                        f'{PrintColors.ENDC}',
-                        flush=True
-                    )
-
+                    cprint(PrintColors.WARNING, 'This thread just got an event to terminate all work!')
                     try:
                         process.terminate()
                     except Exception as ex:
-                        print(
-                            f'{PrintColors.FAIL}'
-                            f'Unexpected exception while terminating process: {repr(ex)}.'
-                            f'{PrintColors.ENDC}',
-                            flush=True
-                        )
+                        cprint(PrintColors.FAIL, f'Unexpected exception while terminating process: {repr(ex)}.')
                     finally:
-                        print(
-                            f'{PrintColors.OKGREEN}'
-                            f'This thread has finished.'
-                            f'{PrintColors.ENDC}',
-                            flush=True
-                        )
-
+                        cprint(PrintColors.OKBLUE, f'This thread has finished due to a received thread event.')
                         return
 
-                print(f'[{self.__stack}]   {line}')
+                if not suppress_command_output:
+                    # Print the whole output produced by an execution of the deployment command.
+                    print(f'[{self.__stack}]\t{line}', end='')
 
-            print(
-                f'{PrintColors.OKGREEN}'
-                f'Deployment of stack {self.__stack} was successful.'
-                f'{PrintColors.ENDC}',
-                flush=True
-            )
+            cprint(PrintColors.OKGREEN, f'Deployment of stack {self.__stack} was successful.')
         except Exception as ex:
-            print(
-                f'{PrintColors.FAIL}'
-                f'Exception raised in {self.__stack} stack. Error: {repr(ex)}.'
-                f'{PrintColors.ENDC}',
-                flush=True
-            )
+            cprint(PrintColors.FAIL, f'Exception raised in {self.__stack} stack. Error: {repr(ex)}.')
 
             if error_handling_strategy == ErrorHandlingStrategy.RAISE:
+                cprint(PrintColors.OKBLUE, f'Error handling is {ErrorHandlingStrategy.RAISE}, hence re-raising the exception.')
                 raise
 
             if error_handling_strategy == ErrorHandlingStrategy.RETRY:
-                self.execute(error_handling_strategy, thread_event)
+                cprint(PrintColors.OKBLUE, f'Error handling is {ErrorHandlingStrategy.RETRY}, hence re-running the deployment.')
+                self.execute(error_handling_strategy, thread_event, suppress_command_output)
