@@ -3,11 +3,11 @@ import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import List
 
-from parallel.cdk_stacks import CdkStacks
-from parallel.deploy_command import DeployCommand
-from parallel.deployment_type import DeploymentType
-from parallel.error_handling_strategy import ErrorHandlingStrategy
-from parallel.stack_deployment_future import StackDeploymentFuture
+from b_aws_cdk_parallel.cdk_stacks import CdkStacks
+from b_aws_cdk_parallel.deploy_command import DeployCommand
+from b_aws_cdk_parallel.deployment_type import DeploymentType
+from b_aws_cdk_parallel.error_handling_strategy import ErrorHandlingStrategy
+from b_aws_cdk_parallel.stack_deployment_future import StackDeploymentFuture
 
 
 class DeploymentExecutor:

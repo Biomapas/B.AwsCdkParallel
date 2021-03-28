@@ -2,16 +2,15 @@ import threading
 
 from b_continuous_subprocess.continuous_subprocess import ContinuousSubprocess
 
-from parallel.deployment_type import DeploymentType
-from parallel.error_handling_strategy import ErrorHandlingStrategy
-from parallel.print_colors import PrintColors
+from b_aws_cdk_parallel.deployment_type import DeploymentType
+from b_aws_cdk_parallel.error_handling_strategy import ErrorHandlingStrategy
+from b_aws_cdk_parallel.print_colors import PrintColors
 
 
 class DeployCommand:
     def __init__(self, stack: str, deployment_type: DeploymentType):
         self.__stack = stack
         self.__deployment_type = deployment_type
-        self.__ = True
 
     def execute(self, error_handling_strategy: ErrorHandlingStrategy, thread_event: threading.Event = None) -> None:
         """

@@ -1,0 +1,6 @@
+include VERSION
+include LICENSE
+include README.md
+include HISTORY.md
+
+recursive-include b_aws_cdk_parallel *.py

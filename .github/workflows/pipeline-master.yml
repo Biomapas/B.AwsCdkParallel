@@ -1,0 +1,33 @@
+name: Pipeline
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  install-test-build-push:
+    runs-on: ubuntu-latest
+    container: biomapas/cicd-full:0.0.2
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: |
+          npm install -g aws-cdk
+          pip install . --upgrade
+          pip list
+
+      - name: Install
+        run: pip install wheel twine
+
+      - name: Build
+        run: python setup.py sdist bdist_wheel
+
+      - name: Upload
+        run: twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
