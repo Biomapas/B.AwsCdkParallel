@@ -31,7 +31,7 @@ class DeploymentExecutor:
         with ThreadPoolExecutor(max_workers=min(len(stacks), self.__max_thread_workers)) as executor:
             main_deployment = executor.submit(
                 DeployCommand('*', self.__deployment_type).execute,
-                ErrorHandlingStrategy.RAISE
+                ErrorHandlingStrategy.RETRY_IF_POSSIBLE
             )
 
             cprint(PrintColors.OKGREEN, 'Successfully created main deployment future.')
@@ -52,6 +52,7 @@ class DeploymentExecutor:
                     DeployCommand(stack, self.__deployment_type).execute,
                     ErrorHandlingStrategy.RETRY,
                     future.thread_event,
+                    True,
                     True
                 )
 

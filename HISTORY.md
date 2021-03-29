@@ -1,5 +1,8 @@
 # Release history
 
+### 0.2.0
+* Add ability to retry main deployment too.
+
 ### 0.1.0
 * Refactor project to make it more debug-friendly.
 
