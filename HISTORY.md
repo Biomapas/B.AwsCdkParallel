@@ -1,5 +1,8 @@
 # Release history
 
+### 0.3.0
+* Add ability to specify CDK path and environment variables for processes.
+
 ### 0.2.0
 * Add ability to retry main deployment too.
 

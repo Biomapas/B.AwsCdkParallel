@@ -1,6 +1,7 @@
 import json
 import subprocess
 import threading
+from typing import Optional, Dict
 
 from b_continuous_subprocess.continuous_subprocess import ContinuousSubprocess
 
@@ -12,9 +13,17 @@ from b_aws_cdk_parallel.retryable_indicators import RetryableIndicators
 
 
 class DeployCommand:
-    def __init__(self, stack: str, deployment_type: DeploymentType):
+    def __init__(
+            self,
+            stack: str,
+            deployment_type: DeploymentType,
+            cdk_app_path: Optional[str] = None,
+            process_environment: Optional[Dict[str, str]] = None
+    ):
         self.__stack = stack
         self.__deployment_type = deployment_type
+        self.__cdk_app_path = cdk_app_path
+        self.__process_environment = process_environment
 
     def execute(
             self,
@@ -50,7 +59,12 @@ class DeployCommand:
         cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
 
         process = ContinuousSubprocess(command)
-        process_generator = process.execute(max_error_trace_lines=100)
+
+        process_generator = process.execute(
+            path=self.__cdk_app_path,
+            env=self.__process_environment,
+            max_error_trace_lines=100,
+        )
 
         try:
             for line in process_generator:

@@ -1,7 +1,7 @@
 import threading
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
-from typing import List
+from typing import List, Optional, Dict
 
 from b_aws_cdk_parallel.cdk_stacks import CdkStacks
 from b_aws_cdk_parallel.color_print import cprint
@@ -17,11 +17,15 @@ class DeploymentExecutor:
             self,
             deployment_type: DeploymentType,
             max_thread_workers: int = 10,
-            parallel_deployment_delay_seconds: int = 10
-    ):
+            parallel_deployment_delay_seconds: int = 10,
+            cdk_application_path: Optional[str] = None,
+            cdk_process_environment: Optional[Dict[str, str]] = None
+    ) -> None:
         self.__deployment_type = deployment_type
         self.__max_thread_workers = max_thread_workers
         self.__parallel_deployment_delay_seconds = parallel_deployment_delay_seconds
+        self.__cdk_application_path = cdk_application_path
+        self.__cdk_process_environment = cdk_process_environment
 
     def run(self) -> None:
         stacks = CdkStacks.list()
@@ -30,7 +34,7 @@ class DeploymentExecutor:
 
         with ThreadPoolExecutor(max_workers=min(len(stacks), self.__max_thread_workers)) as executor:
             main_deployment = executor.submit(
-                DeployCommand('*', self.__deployment_type).execute,
+                DeployCommand('*', self.__deployment_type, self.__cdk_application_path, self.__cdk_process_environment).execute,
                 ErrorHandlingStrategy.RETRY_IF_POSSIBLE
             )
 
@@ -49,7 +53,7 @@ class DeploymentExecutor:
                 future.stack_name = stack
                 future.thread_event = threading.Event()
                 future.future_object = executor.submit(
-                    DeployCommand(stack, self.__deployment_type).execute,
+                    DeployCommand(stack, self.__deployment_type, self.__cdk_application_path, self.__cdk_process_environment).execute,
                     ErrorHandlingStrategy.RETRY,
                     future.thread_event,
                     True,
