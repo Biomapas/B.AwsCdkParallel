@@ -64,13 +64,18 @@ class DeploymentExecutor:
 
                 stack_futures.append(future)
                 time.sleep(self.__parallel_deployment_delay_seconds)
+
             try:
                 main_deployment.result()
                 exception = main_deployment.exception()
-                if exception: raise exception
-                cprint(PrintColors.OKGREEN, 'The main deployment successfully finished.')
+
+                if exception:
+                    cprint(PrintColors.FAIL, f'The main deployment has failed! Reason: {repr(exception)}.')
+                else:
+                    cprint(PrintColors.OKGREEN, 'The main deployment successfully finished.')
             except Exception as ex:
-                cprint(PrintColors.FAIL, f'The main deployment has failed! Reason: {repr(ex)}.')
+                exception = ex
+                cprint(PrintColors.FAIL, f'The main deployment has failed due unknown error! Reason: {repr(ex)}.')
             finally:
                 for future in stack_futures:
                     cprint(PrintColors.WARNING, f'Cancelling future: {future.stack_name}.')
@@ -81,3 +86,6 @@ class DeploymentExecutor:
 
             cprint(PrintColors.OKBLUE, 'Exiting deployment workflow in 5 seconds...')
             time.sleep(5)
+
+            if exception:
+                raise exception

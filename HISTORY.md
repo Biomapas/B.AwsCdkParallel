@@ -1,5 +1,8 @@
 # Release history
 
+### 0.4.1
+* Raise exception in case of a failed deployment.
+
 ### 0.4.0
 * Cdk list command should also receive path and environment.
 
