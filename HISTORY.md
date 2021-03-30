@@ -1,5 +1,8 @@
 # Release history
 
+### 0.4.0
+* Cdk list command should also receive path and environment.
+
 ### 0.3.0
 * Add ability to specify CDK path and environment variables for processes.
 

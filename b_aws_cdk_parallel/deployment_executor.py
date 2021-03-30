@@ -28,7 +28,7 @@ class DeploymentExecutor:
         self.__cdk_process_environment = cdk_process_environment
 
     def run(self) -> None:
-        stacks = CdkStacks.list()
+        stacks = CdkStacks.list(self.__cdk_application_path, self.__cdk_process_environment)
 
         cprint(PrintColors.OKBLUE, f'Deploying stacks in parallel: {stacks}.')
 
