@@ -1,5 +1,8 @@
 # Release history
 
+### 1.0.0
+* Complete rework of the project. Build a dependency tree to determine what to deploy.
+
 ### 0.4.1
 * Raise exception in case of a failed deployment.
 

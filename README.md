@@ -62,7 +62,7 @@ from parallel.deployment_executor import DeploymentExecutor
 from parallel.deployment_type import DeploymentType
 
 if __name__ == '__main__':
-    executor = DeploymentExecutor(deployment_type=DeploymentType.DEPLOY)
+    executor = DeploymentExecutor(type=DeploymentType.DEPLOY)
     executor.run()
 ```
 
