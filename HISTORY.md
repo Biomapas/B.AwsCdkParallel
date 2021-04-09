@@ -1,5 +1,8 @@
 # Release history
 
+### 1.1.0
+* Add ability to control maximum parallel deployments.
+
 ### 1.0.0
 * Complete rework of the project. Build a dependency tree to determine what to deploy.
 
