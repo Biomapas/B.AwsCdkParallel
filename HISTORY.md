@@ -1,5 +1,11 @@
 # Release history
 
+### 1.3.0
+* Do not rebuild assets on destroy.
+
+### 1.2.0
+* Do not rebuild assets on deployment.
+
 ### 1.1.0
 * Add ability to control maximum parallel deployments.
 

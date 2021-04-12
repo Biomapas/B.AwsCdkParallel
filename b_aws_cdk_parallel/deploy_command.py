@@ -28,16 +28,17 @@ class DeployCommand:
 
         :return: No return.
         """
+        # We already know that at this stage the AWS CDK application was
+        # synthesized and cdk.out directory with assets produced. Hence,
+        # when deploying, we can reuse already synthesized templates with
+        # assets that are in cdk.out dir. More on deployments:
+        # https://taimos.de/blog/deploying-your-cdk-app-to-different-stages-and-environments
+        app_stack = f'--app "cdk.out/" "{self.__stack}"'
+
         if self.__deployment_type == DeploymentType.DEPLOY:
-            # We already know that at this stage the AWS CDK application was
-            # synthesized and cdk.out directory with assets produced. Hence,
-            # when deploying, we can reuse already synthesized templates with
-            # assets. This greatly improves performance as assets don't have
-            # to be build for each stack deployment. More on this technique:
-            # https://taimos.de/blog/deploying-your-cdk-app-to-different-stages-and-environments
-            command = f'cdk deploy --app "cdk.out/" "{self.__stack}"'
+            command = f'cdk deploy {app_stack}'
         elif self.__deployment_type == DeploymentType.DESTROY:
-            command = f'cdk destroy "{self.__stack}" -f'
+            command = f'cdk destroy {app_stack} -f'
         else:
             raise ValueError('Invalid enum value.')
 

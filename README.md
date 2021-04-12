@@ -19,6 +19,12 @@ industry by sharing its IT knowledge with other companies and
 the community. This is an open source library intended to be used 
 by anyone. Improvements and pull requests are welcome.
 
+Some techniques and inspirations were taken from this blog post:<br>
+https://taimos.de/blog/deploying-your-cdk-app-to-different-stages-and-environments
+
+General issue is being discussed on github:<br>
+https://github.com/aws/aws-cdk/issues/1973
+
 ### Related technology
 
 - Python 3
@@ -39,7 +45,7 @@ The project assumes the following:
 https://github.com/aws/aws-cdk
   
 - Read more about parallel AWS CDK deployments:<br>
-https://github.com/aws/aws-cdk/issues/1973
+https://taimos.de/blog/deploying-your-cdk-app-to-different-stages-and-environments
 
 ### Install
 
