@@ -28,7 +28,19 @@ class DeploymentExecutor:
             cprint(PrintColors.OKBLUE, 'No more stacks to deploy. Exiting...')
             return
 
-        stack_dependency_graph = stack_dependency_graph or StackDependencies.generate_graph(self.__path, self.__env)
+        # DESTROY - REVERSE GRAPH. If we are destroying stacks, we want to generate a reverse dependency graph.
+        # It is because we firstly want to destroy all stacks that are not used by other stacks.
+        # DEPLOY - NORMAL GRAPH. If we are deploying stacks, we want to generate a normal dependency graph.
+        # It is because we firstly want to deploy all stacks that don't use other stacks.
+        is_reverse_graph = True if self.__type == DeploymentType.DESTROY else False
+
+        # Reuse dependency graph or create a new one.
+        stack_dependency_graph = stack_dependency_graph or StackDependencies.generate_graph(
+            path=self.__path,
+            environment=self.__env,
+            reverse_dependencies=is_reverse_graph
+        )
+
         cprint(PrintColors.OKBLUE, f'Stack dependency graph:\n{json.dumps(stack_dependency_graph, indent=4)}.')
 
         futures_pool = []

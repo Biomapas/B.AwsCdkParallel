@@ -1,5 +1,10 @@
 # Release history
 
+### 2.0.0
+* Major bug fixes for resolving stack dependencies. The algorithm for parallel stack destruction has fundamentally changed.
+* Added integration tests to test against an actual AWS environment.
+* More improvements will come for 2.1.0.
+
 ### 1.3.0
 * Do not rebuild assets on destroy.
 
