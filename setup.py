@@ -28,6 +28,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'pytest',
+        'attrs>=21.0.0',
         'aws-cdk.core>=1.90.0',
         'aws-cdk.aws-ssm>=1.90.0',
         'b-continuous-subprocess>=0.3.2,<1.0.0',

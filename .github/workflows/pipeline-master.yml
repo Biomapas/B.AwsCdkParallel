@@ -20,7 +20,12 @@ jobs:
         run: |
           npm install -g aws-cdk
           pip install . --upgrade
+
           pip list
+          docker --version
+          python --version
+          node --version
+          npm --version
 
       - name: IntegrationTest
         run: |
