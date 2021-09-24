@@ -26,6 +26,11 @@ setup(
     long_description=README + '\n\n' + HISTORY,
     long_description_content_type='text/markdown',
     include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'acdk=b_aws_cdk_parallel.cli.acdk:main',
+        ],
+    },
     install_requires=[
         'pytest',
         'attrs>=21.0.0',

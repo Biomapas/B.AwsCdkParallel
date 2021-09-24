@@ -1,5 +1,8 @@
 # Release history
 
+### 2.1.0
+* Expose CLI command `acdk` to enable deployment/destruction through CLI.
+
 ### 2.0.0
 * Major bug fixes for resolving stack dependencies. The algorithm for parallel stack destruction has fundamentally changed.
 * Added integration tests to test against an actual AWS environment.

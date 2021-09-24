@@ -63,18 +63,71 @@ pip install .
 
 ### Usage & Examples
 
-```python
-from parallel.deployment_executor import DeploymentExecutor
-from parallel.deployment_type import DeploymentType
+#### Programmatic usage
 
-if __name__ == '__main__':
-    executor = DeploymentExecutor(type=DeploymentType.DEPLOY)
-    executor.run()
+To start deployment programmatically:
+
+```python
+from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
+from b_aws_cdk_parallel.deployment_type import DeploymentType
+
+executor = DeploymentExecutor(
+    type=DeploymentType.DEPLOY,
+    path='/optional/path/to/cdk/app',
+    env={
+        'optional': 'os-level environment variables'
+    }
+)
+
+executor.run()
+```
+
+To start stacks destruction programmatically:
+
+```python
+from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
+from b_aws_cdk_parallel.deployment_type import DeploymentType
+
+executor = DeploymentExecutor(
+    type=DeploymentType.DESTROY,
+    path='/optional/path/to/cdk/app',
+    env={
+        'optional': 'os-level environment variables'
+    }
+)
+
+executor.run()
+```
+
+#### CLI usage
+
+The library also exposes CLI access. 
+
+To get usage help, simply run:
+
+```
+acdk -h
+```
+
+To deploy infrastructure, run:
+
+```
+acdk deploy --path /project/app/
+```
+
+To destroy infrastructure, run:
+
+```
+acdk destroy --path /project/app/
 ```
 
 ### Testing
 
-This project currently has no tests.
+This project has integration tests based on pytest. To run tests, simply run:
+
+```
+pytest b_aws_cdk_parallel_test/integration/tests
+```
 
 ### Contribution
 
