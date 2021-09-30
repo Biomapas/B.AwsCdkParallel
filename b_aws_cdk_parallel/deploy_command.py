@@ -45,6 +45,8 @@ class DeployCommand:
         # We want to ensure that each stack deployment can have its own output.
         command += f' --output=./cdk_stacks/{self.__stack}'
         command += ' --progress events --require-approval never'
+        # Don't let CDK try to deploy dependencies - we have that covered.
+        command += ' --exclusively'
 
         cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
         process = ContinuousSubprocess(command)
