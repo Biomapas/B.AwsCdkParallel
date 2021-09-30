@@ -66,11 +66,13 @@ class StackDependencies:
         stack_dependency_graph = {}
         for name, artifact in cdk_manifest_json['artifacts'].items():
             if artifact['type'] == 'aws:cloudformation:stack':
+                # Get the display name (looks like a path).
+                displayName = artifact.get('displayName', name)
                 # Get all of the dependencies - both stacks and other resources.
                 dependencies = artifact.get('dependencies', [])
                 # Filter just the stack dependencies because we don't care about other resources.
                 dependencies = [d for d in dependencies if d in stacks]
-                stack_dependency_graph[name] = dependencies
+                stack_dependency_graph[displayName] = dependencies
 
         return stack_dependency_graph
 
