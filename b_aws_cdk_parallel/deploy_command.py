@@ -42,9 +42,16 @@ class DeployCommand:
         else:
             raise ValueError('Invalid enum value.')
 
-        # We want to ensure that each stack deployment can have its own output.
+        # We want to ensure that each stack deployment can have its own separate output.
+        # Otherwise some clashes may start happening. Also, this approach is easier for debugging.
         command += f' --output=./cdk_stacks/{self.__stack}'
-        command += ' --progress events --require-approval never'
+        # We want to see beautiful continuous output, hence specify progress events.
+        command += ' --progress events'
+        # We do not want to interact with CLI, hence add "force" flag.
+        command += ' --require-approval never'
+        # Don't let CDK try to deploy dependant stacks - we have that already covered by running
+        # deploy command on each stack separately. This flag should massively increase deployment performance.
+        command += ' --exclusively'
 
         cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
         process = ContinuousSubprocess(command)
@@ -74,11 +81,11 @@ class DeployCommand:
 
             cprint(
                 PrintColors.FAIL,
-                f'{trace=}, '
-                f'{message=}, '
-                f'{trace_size=}, '
-                f'{max_trace_size=}, '
-                f'{ex.returncode=}, '
+                f'{trace=}\n'
+                f'{message=}\n'
+                f'{trace_size=}\n'
+                f'{max_trace_size=}\n'
+                f'{ex.returncode=}\n'
                 f'{ex.cmd=}'
             )
 
