@@ -2,6 +2,7 @@ import json
 import subprocess
 from typing import Optional, Dict
 
+from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 from b_continuous_subprocess.continuous_subprocess import ContinuousSubprocess
 
 from b_aws_cdk_parallel.color_print import cprint
@@ -15,12 +16,14 @@ class DeployCommand:
             stack: str,
             type: DeploymentType,
             path: Optional[str] = None,
-            env: Optional[Dict[str, str]] = None
+            env: Optional[Dict[str, str]] = None,
+            cdk_arguments: Optional[CdkArguments] = None
     ):
         self.__stack = stack
         self.__deployment_type = type
         self.__path = path
         self.__env = env
+        self.__cdk_arguments = cdk_arguments or CdkArguments()
 
     def execute(self) -> None:
         """
@@ -42,9 +45,15 @@ class DeployCommand:
         else:
             raise ValueError('Invalid enum value.')
 
-        # We want to ensure that each stack deployment can have its own output.
+        # We want to ensure that each stack deployment can have its own separate output.
+        # Otherwise some clashes may start happening. Also, this approach is easier for debugging.
         command += f' --output=./cdk_stacks/{self.__stack}'
-        command += ' --progress events --require-approval never'
+        # We want to see beautiful continuous output, hence specify progress events.
+        command += ' --progress events'
+        # We do not want to interact with CLI, hence add "force" flag.
+        command += ' --require-approval never'
+        # Add stack parameters (if any).
+        command += ' ' + self.__cdk_arguments.cli_parameters
 
         cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
         process = ContinuousSubprocess(command)
@@ -74,11 +83,11 @@ class DeployCommand:
 
             cprint(
                 PrintColors.FAIL,
-                f'{trace=}, '
-                f'{message=}, '
-                f'{trace_size=}, '
-                f'{max_trace_size=}, '
-                f'{ex.returncode=}, '
+                f'{trace=}\n'
+                f'{message=}\n'
+                f'{trace_size=}\n'
+                f'{max_trace_size=}\n'
+                f'{ex.returncode=}\n'
                 f'{ex.cmd=}'
             )
 

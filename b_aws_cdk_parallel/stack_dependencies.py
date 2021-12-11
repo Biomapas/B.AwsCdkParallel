@@ -1,6 +1,7 @@
 import json
 from typing import Optional, Dict, List, Any
 
+from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 from b_aws_cdk_parallel.cdk_synth import CdkSynth
 
 
@@ -9,7 +10,8 @@ class StackDependencies:
     def generate_graph(
             path: Optional[str] = None,
             environment: Optional[Dict[str, str]] = None,
-            reverse_dependencies: bool = False
+            reverse_dependencies: bool = False,
+            cdk_arguments: Optional[CdkArguments] = None
     ) -> Dict[str, List[str]]:
         """
         Generates a dependency graph from a given AWS CDK application.
@@ -21,10 +23,11 @@ class StackDependencies:
         :param reverse_dependencies: Indicates whether a graph should contain normal dependencies
             or reversed ones. Normal dependency is represented as a word "USES". Reversed dependency
             is represented as words "IS USED BY".
+        :param cdk_arguments: AWS CDK exclusive arguments.
 
         :return: Dependency graph.
         """
-        CdkSynth.execute(path, environment)
+        CdkSynth.execute(path, environment, cdk_arguments)
 
         with open(f'{path}/cdk.out/manifest.json', 'r') as file:
             data = file.read()

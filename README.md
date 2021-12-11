@@ -65,35 +65,63 @@ pip install .
 
 #### Programmatic usage
 
-To start deployment programmatically:
+The quickest and easiest example:
 
 ```python
 from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
 from b_aws_cdk_parallel.deployment_type import DeploymentType
 
+executor = DeploymentExecutor(type=DeploymentType.DEPLOY)
+executor.run()
+
+executor = DeploymentExecutor(type=DeploymentType.DESTROY)
+executor.run()
+```
+
+The more advanced example to deploy:
+
+```python
+from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
+from b_aws_cdk_parallel.deployment_type import DeploymentType
+from b_aws_cdk_parallel.cdk_arguments import CdkArguments
+
 executor = DeploymentExecutor(
     type=DeploymentType.DEPLOY,
+    # You can specify a full path to your CDK app.
     path='/optional/path/to/cdk/app',
+    # You can specify OS-level global parameters.
     env={
         'optional': 'os-level environment variables'
-    }
+    },
+    # You can specify AWS-CDK-specific arguments.
+    cdk_arguments=CdkArguments(
+        aws_cdk_app_stacks_to_deploy=['MyCoolStack'],
+        aws_cdk_app_parameters=['Test1=Test1'],
+        aws_cdk_app_context=['Context1=Context1']
+    )
 )
 
 executor.run()
 ```
 
-To start stacks destruction programmatically:
+The more advanced example to destroy:
 
 ```python
 from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
 from b_aws_cdk_parallel.deployment_type import DeploymentType
+from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 
 executor = DeploymentExecutor(
     type=DeploymentType.DESTROY,
     path='/optional/path/to/cdk/app',
     env={
         'optional': 'os-level environment variables'
-    }
+    },
+    cdk_arguments=CdkArguments(
+        aws_cdk_app_stacks_to_deploy=['MyCoolStack'],
+        aws_cdk_app_parameters=['Test1=Test1'],
+        aws_cdk_app_context=['Context1=Context1']
+    )
 )
 
 executor.run()
