@@ -11,8 +11,3 @@ def test_infrastructure():
 
     executor = DeploymentExecutor(type=DeploymentType.DESTROY, path=infrastructure_path)
     executor.run()
-
-
-def test_infrastructure_cli():
-    infrastructure_path = f'{path}/infrastructure3'
-    # pass

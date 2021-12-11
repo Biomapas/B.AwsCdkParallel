@@ -38,11 +38,13 @@ class CdkArguments:
 
     @property
     def cli_parameters(self) -> str:
-        return '--parameters '.join(self.aws_cdk_app_parameters or [])
+        params = [f'--parameters {p}' for p in self.aws_cdk_app_parameters or []]
+        return ' '.join(params)
 
     @property
     def cli_context(self) -> str:
-        return '--context '.join(self.aws_cdk_app_context or [])
+        context = [f'--context {c}' for c in self.aws_cdk_app_context or []]
+        return ' '.join(context)
 
     @property
     def cli(self) -> str:

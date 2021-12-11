@@ -68,7 +68,8 @@ class DeploymentExecutor:
                             stack=stack,
                             type=self.__type,
                             path=self.__path,
-                            env=self.__env
+                            env=self.__env,
+                            cdk_arguments=self.__cdk_arguments
                         ).execute,
                     ))
 

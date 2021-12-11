@@ -1,5 +1,11 @@
 # Release history
 
+### 2.2.0
+* Support "--parameters".
+* Support "--context".
+* Support specifying stacks.
+* Add a lot more tests.
+
 ### 2.1.0
 * Expose CLI command `acdk` to enable deployment/destruction through CLI.
 

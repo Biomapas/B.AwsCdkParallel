@@ -28,10 +28,10 @@ class CdkSynth:
         :return: No return.
         """
         cdk_arguments = cdk_arguments or CdkArguments()
-        cdk_args_cli = cdk_arguments.construct_arguments_cli()
+        command = f'cdk synth {cdk_arguments.cli_stacks} {cdk_arguments.cli_context}'
 
         check_call(
-            ['cdk', 'synth', cdk_args_cli.split(' ')],
+            command.split(' '),
             cwd=path,
             env=environment
         )

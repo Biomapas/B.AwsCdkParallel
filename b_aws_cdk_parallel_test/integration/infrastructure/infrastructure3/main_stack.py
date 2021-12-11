@@ -13,8 +13,12 @@ from b_aws_cdk_parallel_test.integration.infrastructure.infrastructure3.stack9 i
 
 
 class MainStack(Stack):
+    """
+    Stack that tests very complex stack dependencies.
+    """
     def __init__(self, scope: Construct) -> None:
-        super().__init__(scope=scope, id='MainStack')
+        stack_name = 'B-Aws-Cdk-Parallel-MainStack-3'
+        super().__init__(scope=scope, id=stack_name, stack_name=stack_name)
 
         s1 = Stack1(self)
         s2 = Stack2(self, s1)

@@ -21,6 +21,7 @@ def main():
     arg_parser.add_argument(
         'stacks',
         nargs='*',
+        action='extend',
         help=(
             'CDK stacks to deploy. '
             'Example: PipelineStack LambdaStack or more advanced like "*Stack". '
@@ -40,6 +41,7 @@ def main():
     arg_parser.add_argument(
         '--parameters',
         nargs='*',
+        action='extend',
         help='Parameters for CDK app. Example: --parameters uploadBucketName=UpBucket.',
     )
 
@@ -48,6 +50,7 @@ def main():
     arg_parser.add_argument(
         '--context',
         nargs='*',
+        action='extend',
         help='Context for CDK app. Example: --context key1=value1.',
     )
 

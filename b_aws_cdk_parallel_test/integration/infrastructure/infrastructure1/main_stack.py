@@ -1,10 +1,15 @@
-from aws_cdk.core import Stack, Construct
 from aws_cdk.aws_ssm import StringParameter
+from aws_cdk.core import Stack, Construct
 
 
 class MainStack(Stack):
+    """
+    Stack to test basic functionality.
+    """
+
     def __init__(self, scope: Construct) -> None:
-        super().__init__(scope=scope, id='MainStack')
+        stack_name = 'B-Aws-Cdk-Parallel-MainStack-1'
+        super().__init__(scope=scope, id=stack_name, stack_name=stack_name)
 
         StringParameter(
             scope=self,
@@ -12,10 +17,12 @@ class MainStack(Stack):
             string_value='parameter1'
         )
 
+        stack_name = 'B-Aws-Cdk-Parallel-ChildStack-1'
         stack1 = Stack(
             scope=self,
-            id='stack1'
-       )
+            id=stack_name,
+            stack_name=stack_name
+        )
 
         StringParameter(
             scope=stack1,
@@ -23,9 +30,11 @@ class MainStack(Stack):
             string_value='parameter2'
         )
 
+        stack_name = 'B-Aws-Cdk-Parallel-ChildStack-2'
         stack2 = Stack(
             scope=stack1,
-            id='stack2'
+            id=stack_name,
+            stack_name=stack_name
         )
 
         StringParameter(

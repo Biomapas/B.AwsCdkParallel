@@ -1,0 +1,14 @@
+{
+  "Resources": {
+    "parameter339287B26": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Type": "String",
+        "Value": "parameter3"
+      },
+      "Metadata": {
+        "aws:cdk:path": "MainStack/stack1/stack2/parameter3/Resource"
+      }
+    }
+  }
+}

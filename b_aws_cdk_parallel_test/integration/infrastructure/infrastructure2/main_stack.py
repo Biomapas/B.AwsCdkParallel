@@ -3,8 +3,12 @@ from aws_cdk.aws_ssm import StringParameter
 
 
 class MainStack(Stack):
+    """
+    Stack to test basic functionality.
+    """
     def __init__(self, scope: Construct) -> None:
-        super().__init__(scope=scope, id='MainStack')
+        stack_name = 'B-Aws-Cdk-Parallel-MainStack-2'
+        super().__init__(scope=scope, id=stack_name, stack_name=stack_name)
 
         stack1 = Stack(
             scope=self,

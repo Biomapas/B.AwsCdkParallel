@@ -2,6 +2,7 @@ import json
 import subprocess
 from typing import Optional, Dict
 
+from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 from b_continuous_subprocess.continuous_subprocess import ContinuousSubprocess
 
 from b_aws_cdk_parallel.color_print import cprint
@@ -15,12 +16,14 @@ class DeployCommand:
             stack: str,
             type: DeploymentType,
             path: Optional[str] = None,
-            env: Optional[Dict[str, str]] = None
+            env: Optional[Dict[str, str]] = None,
+            cdk_arguments: Optional[CdkArguments] = None
     ):
         self.__stack = stack
         self.__deployment_type = type
         self.__path = path
         self.__env = env
+        self.__cdk_arguments = cdk_arguments or CdkArguments()
 
     def execute(self) -> None:
         """
@@ -49,9 +52,8 @@ class DeployCommand:
         command += ' --progress events'
         # We do not want to interact with CLI, hence add "force" flag.
         command += ' --require-approval never'
-        # Don't let CDK try to deploy dependant stacks - we have that already covered by running
-        # deploy command on each stack separately. This flag should massively increase deployment performance.
-        command += ' --exclusively'
+        # Add stack parameters (if any).
+        command += ' ' + self.__cdk_arguments.cli_parameters
 
         cprint(PrintColors.OKBLUE, f'Executing command: {command}.')
         process = ContinuousSubprocess(command)
