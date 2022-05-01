@@ -1,6 +1,9 @@
 import json
+import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import List, Optional, Dict
+
+from b_aws_cdk_parallel.aws_cdk_stack import AwsCdkStack
 
 from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 from b_aws_cdk_parallel.color_print import cprint
@@ -34,7 +37,15 @@ class DeploymentExecutor:
         self.__max_parallel_deployments = max_parallel_deployments or 100
         self.__cdk_arguments = cdk_arguments or CdkArguments()
 
-    def run(self, stack_dependency_graph: Optional[Dict[str, List[str]]] = None) -> None:
+    def run(self):
+        cprint(PrintColors.OKBLUE, 'Starting to deploy stacks...\n')
+        time_seconds_start = time.time()
+        self.__run()
+        time_seconds_end = time.time()
+        time_delta = int(time_seconds_end - time_seconds_start)
+        cprint(PrintColors.OKBLUE, f'\nTotal deployment time: {time_delta} seconds.\n')
+
+    def __run(self, stack_dependency_graph: Optional[Dict[AwsCdkStack, List[AwsCdkStack]]] = None) -> None:
         if stack_dependency_graph is not None and len(stack_dependency_graph) == 0:
             cprint(PrintColors.OKBLUE, 'No more stacks to deploy. Exiting...')
             return
@@ -53,7 +64,10 @@ class DeploymentExecutor:
             cdk_arguments=self.__cdk_arguments
         )
 
-        cprint(PrintColors.OKBLUE, f'Stack dependency graph:\n{json.dumps(stack_dependency_graph, indent=4)}.')
+        print('\n')
+        cprint(PrintColors.OKBLUE, '----- Stack dependency graph: -----')
+        StackDependencies.visualise_graph(stack_dependency_graph)
+        print('\n')
 
         futures_pool = []
         deployable_stacks = []
@@ -61,7 +75,7 @@ class DeploymentExecutor:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             for stack, dependencies in stack_dependency_graph.items():
                 if len(dependencies) == 0:
-                    cprint(PrintColors.OKBLUE, f'Stack {stack} has no dependencies, deploying...')
+                    cprint(PrintColors.OKBLUE, f'Stack {str(stack)} has no dependencies, deploying...')
                     deployable_stacks.append(stack)
                     futures_pool.append(executor.submit(
                         DeployCommand(
@@ -77,7 +91,7 @@ class DeploymentExecutor:
                 future.result()
 
         for stack in deployable_stacks:
-            cprint(PrintColors.OKBLUE, f'Removing stack {stack} from the graph as it was successflu deployed...')
+            cprint(PrintColors.OKBLUE, f'Removing stack {str(stack)} from the graph as it was successfully deployed...')
             StackDependencies.remove_dependency(stack, stack_dependency_graph)
 
-        self.run(stack_dependency_graph)
+        self.__run(stack_dependency_graph)

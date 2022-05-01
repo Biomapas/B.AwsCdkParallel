@@ -78,7 +78,7 @@ executor = DeploymentExecutor(type=DeploymentType.DESTROY)
 executor.run()
 ```
 
-The more advanced example to deploy:
+The more advanced example to deploy/destroy:
 
 ```python
 from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
@@ -86,7 +86,7 @@ from b_aws_cdk_parallel.deployment_type import DeploymentType
 from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 
 executor = DeploymentExecutor(
-    type=DeploymentType.DEPLOY,
+    type=DeploymentType.DEPLOY, # Or DESTROY
     # You can specify a full path to your CDK app.
     path='/optional/path/to/cdk/app',
     # You can specify OS-level global parameters.
@@ -104,27 +104,27 @@ executor = DeploymentExecutor(
 executor.run()
 ```
 
-The more advanced example to destroy:
+The library generates beautiful stack dependency outputs for easier debugging:
 
-```python
-from b_aws_cdk_parallel.deployment_executor import DeploymentExecutor
-from b_aws_cdk_parallel.deployment_type import DeploymentType
-from b_aws_cdk_parallel.cdk_arguments import CdkArguments
+```
+----- Stack dependency graph: -----
+» Stack1: []
+× Stack2: [Stack1]
+× Stack3: [Stack1]
+× Stack4: [Stack1, Stack2, Stack3]
+× Stack5: [Stack1, Stack4]
+» Stack8: []
+× Stack7: [Stack1, Stack2, Stack3, Stack4, Stack5]
+× Stack6: [Stack1, Stack7]
+× Stack10: [Stack1, Stack6, Stack7]
+× Stack9: [Stack1, Stack8]
+» B-Aws-Cdk-Parallel-MainStack-3: []
 
-executor = DeploymentExecutor(
-    type=DeploymentType.DESTROY,
-    path='/optional/path/to/cdk/app',
-    env={
-        'optional': 'os-level environment variables'
-    },
-    cdk_arguments=CdkArguments(
-        aws_cdk_app_stacks_to_deploy=['MyCoolStack'],
-        aws_cdk_app_parameters=['Test1=Test1'],
-        aws_cdk_app_context=['Context1=Context1']
-    )
-)
 
-executor.run()
+[Stack2]  Doing stuff...
+[Stack2]  Doing stuff...
+[Stack4]  Doing stuff...
+[Stack3]  Doing stuff...
 ```
 
 #### CLI usage

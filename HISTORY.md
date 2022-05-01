@@ -1,5 +1,11 @@
 # Release history
 
+### 2.3.0
+* Improve parallel stack deployments by introducing `--exclusively` flag.
+* Make dependencies graph beautiful.
+* Output beautiful stack names (not aws cdk generated names).
+* Fix --path CLI bug.
+
 ### 2.2.0
 * Support "--parameters".
 * Support "--context".
