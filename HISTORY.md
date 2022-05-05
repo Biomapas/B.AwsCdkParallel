@@ -1,5 +1,9 @@
 # Release history
 
+### 3.0.0
+* cdk v2 compatibility.
+* Use the stack displayName when calling the cdk deploy command.
+
 ### 2.3.0
 * Improve parallel stack deployments by introducing `--exclusively` flag.
 * Make dependencies graph beautiful.
