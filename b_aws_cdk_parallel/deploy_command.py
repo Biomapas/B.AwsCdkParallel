@@ -37,7 +37,7 @@ class DeployCommand:
         # when deploying, we can reuse already synthesized templates with
         # assets that are in cdk.out dir. More on deployments:
         # https://taimos.de/blog/deploying-your-cdk-app-to-different-stages-and-environments
-        app_stack = f'--app "cdk.out/" "{self.__stack.aws_cdk_name}"'
+        app_stack = f'--app "cdk.out/" "{self.__stack.display_name}"'
 
         if self.__deployment_type == DeploymentType.DEPLOY:
             command = f'cdk deploy {app_stack} --exclusively'
