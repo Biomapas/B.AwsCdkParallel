@@ -19,6 +19,7 @@ jobs:
       - name: Install
         run: |
           npm install -g aws-cdk@1.x
+          pip install -r b_aws_cdk_parallel_test/requirements.txt
           pip install . --upgrade
 
           pip list
