@@ -1,10 +1,8 @@
-import json
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import List, Optional, Dict
 
 from b_aws_cdk_parallel.aws_cdk_stack import AwsCdkStack
-
 from b_aws_cdk_parallel.cdk_arguments import CdkArguments
 from b_aws_cdk_parallel.color_print import cprint
 from b_aws_cdk_parallel.deploy_command import DeployCommand

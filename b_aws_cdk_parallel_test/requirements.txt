@@ -1,0 +1,5 @@
+aws-cdk.aws-ssm
+pytest
+boto3
+b-aws-cf
+attrs>=21.0.0

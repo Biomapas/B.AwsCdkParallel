@@ -1,5 +1,9 @@
 # Release history
 
+### 3.1.0
+* Fix dependencies.
+* Remove unnecessary dependencies.
+
 ### 3.0.0
 * cdk v2 compatibility.
 * Use the stack displayName when calling the cdk deploy command.

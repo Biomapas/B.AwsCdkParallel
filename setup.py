@@ -32,17 +32,11 @@ setup(
         ],
     },
     install_requires=[
-        'pytest',
-        'attrs>=21.0.0',
-        'boto3>=1.0.0,<=1.20.23',
-
         # Other custom in-house dependencies.
         'b-continuous-subprocess>=0.3.2,<1.0.0',
-        'b-aws-cf>=0.2.0,<2.0.0',
 
         # AWS CDK dependencies.
-        'aws-cdk.core>=1.90.0,<=1.134.0',
-        'aws-cdk.aws-ssm>=1.90.0,<=1.134.0',
+        'aws-cdk.core>=1.90.0,<=2.0.0',
     ],
     author='Laimonas Sutkus',
     author_email='laimonas.sutkus@biomapas.com',
