@@ -1,5 +1,10 @@
 # Release history
 
+### 3.2.0
+* Remove `aws-cdk.core` dependency as it is probably not needed (if the project is developed
+  with AWS CDK anyways it will have `core` module installed). By removing this dependency both
+  `V1` and `V2` versions of AWS CDK should work.
+
 ### 3.1.0
 * Fix dependencies.
 * Remove unnecessary dependencies.

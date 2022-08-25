@@ -1,4 +1,5 @@
 aws-cdk.aws-ssm
+aws-cdk.core
 pytest
 boto3
 b-aws-cf

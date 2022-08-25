@@ -32,11 +32,8 @@ setup(
         ],
     },
     install_requires=[
-        # Other custom in-house dependencies.
+        # Library used for a continuous real-time output to the console.
         'b-continuous-subprocess>=0.3.2,<1.0.0',
-
-        # AWS CDK dependencies.
-        'aws-cdk.core>=1.90.0,<=2.0.0',
     ],
     author='Laimonas Sutkus',
     author_email='laimonas.sutkus@biomapas.com',
