@@ -54,6 +54,19 @@ def main():
         help='Context for CDK app. Example: --context key1=value1.',
     )
 
+    # Adding support for the 'max_parallel_deployments' parameter.
+    arg_parser.add_argument(
+        '--max-parallel-deployments',
+        nargs="?",
+        type=int,
+        default=100,
+        help=(
+            'Maximum amount of parallel deployments at the same time. '
+            'Example: --max-parallel-deployments 10. '
+            'If nothing is specified 100 is used as the default.'
+        )
+    )
+
     params = arg_parser.parse_args()
 
     cdk_arguments = CdkArguments(
@@ -65,5 +78,6 @@ def main():
     DeploymentExecutor(
         type=DeploymentType[params.action.upper()],
         path=params.path,
-        cdk_arguments=cdk_arguments
+        cdk_arguments=cdk_arguments,
+        max_parallel_deployments=params.max_parallel_deployments
     ).run()

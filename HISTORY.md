@@ -1,5 +1,10 @@
 # Release history
 
+### 3.3.0
+* Add `--max-parallel-deployments` CLI flag to allow control of number the of stack deployments
+  that run at the same time. For larger projects this can significantly reduce the amount of 
+  memory used when deploying a highly parallel stack.
+
 ### 3.2.0
 * Remove `aws-cdk.core` dependency as it is probably not needed (if the project is developed
   with AWS CDK anyways it will have `core` module installed). By removing this dependency both
