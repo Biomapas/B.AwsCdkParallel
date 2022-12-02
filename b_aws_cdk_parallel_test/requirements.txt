@@ -1,6 +1,6 @@
-aws-cdk.aws-ssm
-aws-cdk.core
-pytest
-boto3
-b-aws-cf
+aws-cdk.aws-ssm==1.181.1
+aws-cdk.core==1.181.1
+pytest==7.1.2
+boto3==1.20.23
+b-aws-cf==0.2.1
 attrs>=21.0.0
